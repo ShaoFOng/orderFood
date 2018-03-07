@@ -1,0 +1,55 @@
+border-1px($color)
+  position: relative
+  &:after
+    display: block
+    position: absolute
+    left: 0
+    bottom: 0
+    width: 100%
+    border-top: 1px solid $color
+    content: ' '
+
+border-none()
+  &:after
+    display: none
+
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")
+    
+$blue = lightgreen
+$bc = #e4e4e4
+$fc = #fff 
+
+wh(width,rem)
+  width:width
+  height:rem
+  
+sc($size, $color){
+  font-size: $size;
+  color: $color;
+}
+
+ct() {  
+  position: absolute;
+  top: 50%;
+    transform: translateY(-50%);
+}
+
+center() {  
+  position: absolute;
+  top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+fj($type){
+  display: flex;
+  justify-content: $type;
+
+}
+
+// font($size, $line-height, $family: 'Microsoft YaHei') {  
+//   font: #{$size}/#{$line-height} $family;
+// }
