@@ -49,7 +49,7 @@
                 alertText: null, //提示的内容
                 verifyCode: null,//验证码
                 cacheValidate: null,//缓存的验证码
-                url:'load',//登录接口
+                url:'userLogin',//登录接口
                 verifyCodeObject:'',
             }
         },
@@ -119,7 +119,8 @@
                 this.showAlert = false;
             },
             login(){
-                let data = {'account':this.userAccount,'passwd':this.passWord};
+                let data = {'account':this.userAccount,'pwd':this.passWord};
+                console.log(data);
                 /*接口请求*/
                 let myurl = publicDom.base_url+this.url;
                 this.$http.post(myurl,data,{emulateJSON:true}).then((res)=>{
@@ -128,9 +129,9 @@
                       /*路由跳转this.$router.push*/
                     setCookie('user_name',this.userAccount,1000*60);//设置1天
                     setCookie('user_passwd',this.passWord,1000*60);
-                    setCookie('user_id',list.list.id,1000*60);
+                    //setCookie('user_id',list.list.id,1000*60);
                     // window.localStorage._sell_user_id = list.list.id;//拦截器的判断
-                    window.localStorage.setItem('_sell_user_id',list.list.id);
+                    window.localStorage.setItem('_sell_user_id',list.object.account);
                       setTimeout(function(){
                           this.$router.push('/home');
                       }.bind(this),100);

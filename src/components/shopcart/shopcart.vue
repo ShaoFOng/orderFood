@@ -10,11 +10,11 @@
             <div class="num" v-show="totalCount>0">{{totalCount}}</div>
           </div>
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
+          <!--<div class="desc">另需配送费￥{{deliveryPrice}}元</div>-->
         </div>
         <div class="content-right" @click.stop.prevent="pay">
-          <div class="pay" :class="payClass">
-            {{payDesc}}
+          <div class="pay" :class="payClass" @click="sendgoods">
+            结算
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
               <li class="food" v-for="food in selectFoods">
                 <span class="name">{{food.name}}</span>
                 <div class="price">
-                  <span>￥{{food.discountprice*food.count}}</span>
+                  <span>￥{{food.price*food.count}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
                   <cartcontrol @add="addFood" :food="food"></cartcontrol>
@@ -104,17 +104,16 @@
           }
         ],
         dropBalls: [],
-        fold: true
+        fold: true,
       };
     },
     created(){
-
     },
     computed: {
       totalPrice() {
         let total = 0;
         this.selectFoods.forEach((food) => {
-          total += food.discountprice * food.count;
+          total += food.price * food.count;
         });
         return total;
       },
@@ -136,7 +135,7 @@
         }
       },
       payClass() {
-        if (this.totalPrice < this.minPrice) {
+        if (this.totalPrice <= 0) {
           return 'not-enough';
         } else {
           return 'enough';
@@ -237,6 +236,36 @@
       },
       closeTip(){
         this.showAlert = false;
+      },
+      sendgoods(){
+        var userAccount = window.localStorage.getItem('_sell_user_id');
+        var obj = {
+          "account": userAccount,
+          "selectFoods": this.selectFoods
+        }
+        console.log(obj);
+        console.log(JSON.stringify(obj));
+        var data = JSON.stringify(obj);
+        let myurl = publicDom.base_url+'createOrder';
+              $.ajax({
+                type: "POST",
+                url: myurl,
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function(result) {
+                  console.log("111");
+                }
+            });
+        // this.$http.post(myurl,data,{emulateJSON:true}).then((res)=>{
+        //     let list = res.data;
+        //     console.log(list);
+        //   if(list.code == 200){
+        //     console.log("success");
+        //   }else{
+        //       console.log("error");
+        //   }
+        // });
       }
     },
     components: {

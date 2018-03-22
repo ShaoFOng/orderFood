@@ -41,7 +41,7 @@
         //   this.$set(this.food,'count',1);
         // }
         // else{
-          this.food.count++;
+          this.food.count++;    
         // }
         this.$emit('add', event.target);
       },

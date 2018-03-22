@@ -50,7 +50,7 @@
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 accountType: 'mobile',//注册方式
-                url: 'save',//
+                url: 'register',//
             }
         },
         components: {
@@ -120,17 +120,11 @@
             },
             //注册请求
             register(){
-                if (this.sex = '男') {
-                    var sexual = 1;
-                }
-                else{
-                    var sexual = 0;
-                }
                 var data = {
                     'account':this.account,
                     'name':this.uname,
-                    'passwd':this.newPassWord,
-                    'sex':sexual,
+                    'pwd':this.newPassWord,
+                    'sex':this.sex,
                     'email':this.email,
                     'phone':this.phone
                 }

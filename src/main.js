@@ -18,6 +18,9 @@ import passwdChange from 'components/infoDetail/passwdChange';
 import changeInfo from 'components/infoDetail/changeInfo';
 import loading from 'components/loading/loading';
 import loading_svg from 'components/loading/loading_svg';
+import orderDetail from 'components/order/orderDetail';
+import commend from 'components/commend/commend';
+import showCommend from 'components/commend/showCommend';
 import 'common/stylus/index.styl';
 
 
@@ -56,6 +59,7 @@ const routes = [{
 },{
   path: '/home',
   component: home,
+  name: 'home',
   meta: { requiresAuth: true }
 },{
   path: '/search',
@@ -68,6 +72,7 @@ const routes = [{
 },{
   path: '/order',
   component: order,
+  name: 'order',
   meta: { requiresAuth: true }
 },{
   path: '/shoppingCart',
@@ -92,6 +97,21 @@ const routes = [{
 },{
   path: '/loading2',
   component: loading_svg
+},{
+  path: '/orderDetail',
+  name: 'orderDetail',
+  component: orderDetail,
+  meta: { requiresAuth: true }
+},{
+  path: '/commend',
+  component: commend,
+  name: "commend",
+  meta: { requiresAuth: true }
+},{
+  path: '/showCommend',
+  name: 'showCommend',
+  component: showCommend,
+  meta: { requiresAuth: true }
 }];
 
 const router = new VueRouter({

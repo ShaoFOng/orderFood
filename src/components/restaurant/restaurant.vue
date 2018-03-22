@@ -2,13 +2,13 @@
 	<div class="shoplist_container" ref='shoplistContainer'>
 		<loading :show='this.loadingShow'></loading>
 		<ul>
-			<router-link v-for="item in this.restaurant" :to="{name:'goods', params: {'restaurantInfo':item}}" tag='li' class="shop_li border-1px">
+			<li v-for="item in this.restaurant" @click="toGoods(item,$event)" class="shop_li border-1px">
 				<section>
 					<img src="../../../static/img/shop.jpeg" class="shop_img">
 				</section>
 				<div class="shop_right">
 					<header class="shop_detail_header">
-						<h4 class="" class="shop_title ellipsis">{{item.name}}</h4>
+						<h4 class="" class="shop_title ellipsis">{{item.typename}}</h4>
 					</header>
 					<h5 class="rating_order_num">
 						<section class="rating_order_num_left">
@@ -42,7 +42,7 @@
 						</section>
 					</h5>
 				</div>
-			</router-link>
+			</li>
 		</ul>
 		<!-- <p v-else class="empty_data">没有更多了</p> -->
 		<!-- <aside class="return_top" @click="backTop" v-if="showBackStatus">
@@ -70,7 +70,7 @@ export default {
 			showBackStatus: false, //显示返回顶部按钮
 			showLoading: true, //显示加载动画
 			restaurant:{},//存储餐厅信息
-			allRestuarantUrl:'queryAllRestaurant',//查询所有餐厅
+			allRestuarantUrl:'queryType',//查询所有餐厅
 			loadingShow:true,
 
 		}
@@ -87,21 +87,28 @@ export default {
 	},
 	props: ['restaurantCategoryId', 'restaurantCategoryIds', 'sortByType', 'deliveryMode', 'supportIds', 'confirmSelect', 'geohash','allRestaurantInfo'],
 	computed: {
-		
+
 	},
 	methods: {
+		toGoods(item,event){
+	        if (event._constructed) {
+	          return;
+	        }
+	        this.$router.push({"name":"goods","params":{'restaurantInfo':item}});
+		},
 		async initData(){
 			
 		},
 		//获取所有餐厅
         getAllRestuarant(){
         	this.loadingShow = true;
-            let detail = publicDom.main_url+this.allRestuarantUrl;
+            let detail = publicDom.base_url+this.allRestuarantUrl;
             this.$http.post(detail,"",{emulateJSON:true}).then((res) =>{
                 let list = res.data;
+                console.log(list);
                 this.loadingShow = false;
                 if (list.code == 200) {
-                    this.restaurant = list.list;
+                    this.restaurant = list.object;
                     this.$nextTick(() => {
                     	this._scroll();
                     })
@@ -170,7 +177,7 @@ export default {
 	},
 	watch: {
 		//路由发生变化重新执行函数
-        '$route': 'getAllRestuarant',
+        //'$route': 'getAllRestuarant',
 		//监听父级传来的restaurantCategoryIds，当值发生变化的时候重新获取餐馆数据，作用于排序和筛选
 		restaurantCategoryIds: function (value){
 			this.listenPropChange();
