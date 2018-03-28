@@ -9,7 +9,7 @@
                     <a href="javascript:void(0)">评价</a>
                 </div>
                 <div class="right-slogan">
-                    <span>发布</span>
+                    <span @click="sendCommend">发布</span>
                 </div>
             </div>
         </div>
@@ -19,17 +19,22 @@
                 <span class="commend_goods">{{this.orderDetailsInfo.name}}</span>
             </div>
             <div class="content_wrapper">
-                <textarea class="commend_content" placeholder="童鞋留下你对这道菜的评价吧^.^乐于分享才是一个好学生"></textarea>
+                <textarea class="commend_content" placeholder="童鞋留下你对这道菜的评价吧^.^乐于分享才是一个好学生" v-model="commendContent">
+                </textarea>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {getCookie} from '../../assets/js/cookie.js'
     export default {
     	data(){
             return{
                 orderDetailsInfo: {},//获取orderDetail.vue传过来的orderDetail信息
+                sendCommendUrl: 'comment',//用户评价菜品接口
+                user_name: '',//用户账号
+                commendContent: null,//评论内容
             }
         },
         created(){
@@ -45,6 +50,40 @@
             //获取orderDetail.vue传过来的orderDetail信息
             getOrderDetailsInfo(){
                 this.orderDetailsInfo = this.$route.params.orderDetailsInfo;
+            },
+            //评价菜品接口
+            sendCommend(){
+                this.loadingShow = true;
+                let url = publicDom.base_url+this.sendCommendUrl;
+                this.user_name = getCookie("user_name");
+                var data = {
+                    'account': this.user_name,
+                    'name': this.orderDetailsInfo.name,
+                    'content': this.commendContent
+                }
+                console.log(data);
+                this.$http.post(url,data,{emulateJSON:true}).then((res) =>{
+                    let list = res.data;
+                    this.loadingShow = false;
+                    if (list.code == 200) {
+                        layer.open({
+                            style: 'top: 0px;'
+                            ,content: '评论成功！'
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                          });
+                        this.commendContent = '';
+                        this.$router.push('/orderDetail');
+                    }
+                    else {
+                        layer.open({
+                            style: 'top: 0px;'
+                            ,content: '未知错误！'
+                            ,skin: 'msg'
+                            ,time: 1 //2秒后自动关闭
+                          });
+                    }
+                })
             },
         },
         watch: {
