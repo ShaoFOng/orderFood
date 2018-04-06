@@ -5,11 +5,11 @@
             <section>
                 <ul class="changepw-3LrxS">
                     <li class="changepw-lCnqr">
-                        <input type="text" placeholder="请输入修改的新昵称" class="changepw-3bmr-" v-model="nickName" v-on:input ="checkInput">
+                        <input type="text" placeholder="请输入修改的新性别" class="changepw-3bmr-" v-model="sex" v-on:input ="checkInput">
                     </li>
                     
                 </ul>
-                <button type="button" :disabled="Btndisabled" class="changepw-1GfOJ" @click="postNickName">确认并保存</button>
+                <button type="button" :disabled="Btndisabled" class="changepw-1GfOJ" @click="postSex">确认并保存</button>
             </section>
         </div>
     </div>
@@ -23,9 +23,11 @@
     export default {
         data(){
             return {
-                nickName:null,
+                sex:null,
+                showAlert: false, //显示提示组件
+                alertText: null, //提示的内容
                 Btndisabled:true,
-                url:'updateName',//修改昵称接口
+                url:'updateSex',//修改昵称接口
                 user_name:'',
                 user_passwd:'',
                 userInfo:{},//保存的用户信息
@@ -58,33 +60,33 @@
             },
             //btn显示的控制器
             checkInput(){
-                if (this.nickName) {
+                if (this.sex) {
                     this.Btndisabled = false;
                 }
                 else{
                     this.Btndisabled = true;
                 }
             },
-            postNickName(){
-                if(this.nickName.length>20){
+            postSex(){
+                if(this.sex!='男'&&this.sex!='女'){
                     layer.open({
                         style: 'top: 0px;'
-                        ,content: '昵称长度超过20个字符！'
+                        ,content: '性别格式不规范'
                         ,skin: 'msg'
                         ,time: 1 //1秒后自动关闭
                       });
                 }
                 else{
-                    this.changeNickName();
+                    this.changeSex();
                 }
             },
-            //修改昵称接口
-            changeNickName(){
-                var nickName = this.$route.params.userInfo;
+            //修改性别接口
+            changeSex(){
+                var sex = this.$route.params.userInfo;
                 this.user_name = getCookie('user_name');
                 var data = {
                     'account':this.user_name,
-                    'name':this.nickName
+                    'sex':this.sex
                 };
                 let myurl = publicDom.base_url+this.url;
                 this.$http.post(myurl,data,{emulateJSON:true}).then((res) =>{
@@ -96,8 +98,8 @@
                             ,skin: 'msg'
                             ,time: 1 //1秒后自动关闭
                           });
-                        setCookie('nick_name',this.nickName,1000*60);
-                        this.nickName = '';
+                        setCookie('sex',this.sex,1000*60);
+                        this.sex = '';
                         this.Btndisabled = true;
                     }
                     else {
@@ -107,7 +109,7 @@
                             ,skin: 'msg'
                             ,time: 1 //1秒后自动关闭
                           });
-                        this.nickName = '';
+                        this.sex = '';
                         this.Btndisabled = true;
                     }
                 })

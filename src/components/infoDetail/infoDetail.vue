@@ -7,7 +7,7 @@
                 <span>头像</span>
                     <span class="main-nwHdE">
                     <input type="file" class="main-1mfZE">
-                    <img class="main-27dMr">
+                    <img class="main-27dMr" src="static/img/people.jpg">
                     <svg class="main-1kNSK">
                         <!-- <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow"></use> -->
                     </svg>
@@ -17,82 +17,47 @@
                 <router-link to='##' class="main-3Idiu">
                     <span>用户名</span>
                     <span>
-                        <span class="main-2cJz_">{{this.userInfo.account}}</span>
-                        <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
+                        <span class="main-2cJz_">{{this.accountName}}</span>
                     </span>
                 </router-link>
             </li>
             <li>
-                <router-link :to="{name:'changeInfo', params: {'userInfo':this.userInfo,'target':'name'}}" class="main-3Idiu">
+                <router-link :to="{name:'changeInfo', params: {'userInfo':this.nickName,'target':'name'}}" class="main-3Idiu">
                     <span>昵称</span>
                     <span>
-                        <span class="main-2cJz_">{{this.userInfo.name}}</span>
+                        <span class="main-2cJz_">{{this.nickName}}</span>
                         <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
                     </span>
                 </router-link>
             </li>
             <li>
-                <router-link to='/changeInfo' class="main-3Idiu">
-                    <span>年龄</span>
-                    <span>
-                        <span class="main-2cJz_">{{this.userInfo.age}}</span>
-                        <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
-                    </span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to='/changeInfo' class="main-3Idiu">
+                <router-link :to="{name:'changeSex', params: {'userInfo':this.sex,'target':'name'}}" class="main-3Idiu">
                     <span>性别</span>
                     <span>
-                        <span class="main-2cJz_">{{this.userInfo.sex}}</span>
+                        <span class="main-2cJz_">{{this.sex}}</span>
                         <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
                     </span>
                 </router-link>
             </li>
             <li>
-                <router-link to='/changeInfo' class="main-3Idiu">
-                    <span>省份</span>
+                <router-link :to="{name:'changePhone', params: {'userInfo':this.phone,'target':'name'}}" class="main-3Idiu">
+                    <span>电话</span>
                     <span>
-                        <span class="main-2cJz_">{{this.userInfo.province}}</span>
+                        <span class="main-2cJz_">{{this.phone}}</span>
                         <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
                     </span>
                 </router-link>
             </li>
-            
             <li>
-                <router-link to='/changeInfo' class="main-3Idiu">
+                <router-link :to="{name:'changeEmail', params: {'userInfo':this.email,'target':'name'}}" class="main-3Idiu">
                     <span>邮箱</span>
                     <span>
-                        <span class="main-2cJz_">{{this.userInfo.email}}</span>
+                        <span class="main-2cJz_">{{this.email}}</span>
                         <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
                     </span>
                 </router-link>
             </li>
         </ul>
-        <h2 class="main-1OkSR">账号绑定</h2>
-        <ul class="main-22cQX">
-            <li>
-                <router-link to='/changeInfo' class="main-3Idiu">
-                    <span>手机</span>
-                    <span>
-                        <span class="main-2cJz_">{{this.userInfo.phone}}</span>
-                        <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
-                    </span>
-                </router-link>
-            </li>
-      </ul>
-      <h2 class="main-1OkSR">安全设置</h2>
-      <ul class="main-22cQX">
-          <li>
-            <router-link to='/passwdChange' class="main-3Idiu">
-                <span>登录密码</span>
-                <span class="main-2cJz_">
-                    <input type="password" :value="this.userInfo.passwd" style="text-align:right;">
-                    <i class="fa fa-fw fa-angle-right main-1kNSK"></i>
-                </span>
-            </router-link>
-          </li>
-      </ul>
       <button type="button" class="main-aGw6s" @click='qiuck'>退出登录</button></div>
     </div>
 </template>
@@ -105,8 +70,11 @@
     export default {
         data(){
             return {
-                url:'load',//获取个人详情
-                userInfo:{},//个人信息
+                accountName:'',//用户名
+                nickName:'',//昵称
+                sex:'',//性别
+                phone:'',//电话
+                email:'',//邮箱
             }
         },
         created(){
@@ -119,21 +87,11 @@
         methods: {
             //获取用户信息
             getUserInfo(){
-                var account = getCookie('user_name');
-                var password = getCookie('user_passwd');
-                let data = {'account':account,'passwd':password};
-                    /*接口请求*/
-                    let myurl = publicDom.base_url+this.url;
-                    this.$http.post(myurl,data,{emulateJSON:true}).then((res)=>{
-                        let list = res.data;
-                      if(list.code == 200){
-                          /*路由跳转this.$router.push*/
-                          this.userInfo = list.list;
-                      }else{
-                          this.showAlert = true;
-                          this.alertText = list.msg;
-                      }
-                    });
+                this.accountName = getCookie("user_name");
+                this.nickName = getCookie("nick_name");
+                this.sex = getCookie("sex");
+                this.phone = getCookie("phone");
+                this.email = getCookie("email");
             },
             qiuck(){
                 delCookie('user_name');
@@ -142,8 +100,12 @@
                 window.localStorage.removeItem('_sell_user_id');
             }
         },
-        wacth: {
-            '$route':'getUserInfo'
+        watch: {
+            '$route' (to, from) {
+                if (from.path === '/changeInfo'||from.path === '/changeSex'||from.path === '/changePhone'||from.path === '/changeEmail') {
+                    this.getUserInfo()
+                }
+            }
         }
     }
 

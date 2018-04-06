@@ -16,6 +16,9 @@ import myCart from 'components/myCart/myCart';
 import infoDetail from 'components/infoDetail/infoDetail';
 import passwdChange from 'components/infoDetail/passwdChange';
 import changeInfo from 'components/infoDetail/changeInfo';
+import changeSex from 'components/infoDetail/changeSex';
+import changePhone from 'components/infoDetail/changePhone';
+import changeEmail from 'components/infoDetail/changeEmail';
 import loading from 'components/loading/loading';
 import loading_svg from 'components/loading/loading_svg';
 import orderDetail from 'components/order/orderDetail';
@@ -90,6 +93,21 @@ const routes = [{
   path: '/changeInfo',
   name: 'changeInfo',
   component: changeInfo,
+  meta: { requiresAuth: true }
+},{
+  path: '/changeSex',
+  name: 'changeSex',
+  component: changeSex,
+  meta: { requiresAuth: true }
+},{
+  path: '/changePhone',
+  name: 'changePhone',
+  component: changePhone,
+  meta: { requiresAuth: true }
+},{
+  path: '/changeEmail',
+  name: 'changeEmail',
+  component: changeEmail,
   meta: { requiresAuth: true }
 },{
   path: '/loading',

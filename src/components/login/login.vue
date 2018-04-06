@@ -45,6 +45,10 @@
                 userInfo: null, //获取到的用户信息
                 userAccount: '', //用户名
                 passWord: '', //密码
+                name: '',//昵称
+                phone: '',//电话
+                email: '',//邮件
+                sex: '',//性别
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 verifyCode: null,//验证码
@@ -127,8 +131,16 @@
                     let list = res.data;
                   if(list.code == 200){
                       /*路由跳转this.$router.push*/
+                    this.name = list.object.name;
+                    this.phone = list.object.phone;
+                    this.email = list.object.email;
+                    this.sex = list.object.sex;
                     setCookie('user_name',this.userAccount,1000*60);//设置1天
                     setCookie('user_passwd',this.passWord,1000*60);
+                    setCookie('nick_name',this.name,1000*60);
+                    setCookie('phone',this.phone,1000*60);
+                    setCookie('email',this.email,1000*60);
+                    setCookie('sex',this.sex,1000*60);
                     //setCookie('user_id',list.list.id,1000*60);
                     // window.localStorage._sell_user_id = list.list.id;//拦截器的判断
                     window.localStorage.setItem('_sell_user_id',list.object.account);

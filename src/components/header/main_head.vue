@@ -1,7 +1,9 @@
 <template>
     <div class="head_container">
         <div id='head_top'>
-            <section class="head_goback"></section>
+           <section class="head_goback" @click="$router.go(-1)">
+                <i class="fa fa-fw fa-angle-left" style="width:100%;height:100%"></i>
+            </section>
             <section class="title_head ellipsis">
                 <span class="title_text">{{headTitle}}</span>
             </section>
@@ -51,6 +53,7 @@
     }
     .fa-angle-left{
         color:#fff;
+        font-size: 36px;
     }
     .head_login{
         right: 0.55rem;

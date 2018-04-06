@@ -9,7 +9,7 @@
             <span>搜索</span>
         </section> -->
         <section @click = "gotoAddress('/order')" class="guide_item">
-            <i class="fa fa-fw fa-list-alt icon_style" :class="{active:index==2}"></i>
+            <i class="fa fa-fw fa-calendar-o icon_style" :class="{active:index==2}"></i>
             <span>订单</span>
         </section>
         <!--<section @click = "gotoAddress('/shoppingCart')" class="guide_item">
@@ -17,7 +17,7 @@
             <span>购物车</span>
         </section>-->
         <section @click = "gotoAddress('/center')" class="guide_item">
-            <i class="fa fa-fw fa-user icon_style" :class="{active:index==4}"></i>
+            <i class="fa fa-fw fa-male icon_style" :class="{active:index==4}"></i>
             <span>我的</span>
         </section>
     </section>

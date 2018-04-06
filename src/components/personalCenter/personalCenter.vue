@@ -9,13 +9,14 @@
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
                     </svg>
                 </span> -->
+                <div class="comment-img"><img src="static/img/people.jpg"></div>
                 <div class="user-info">
-                    <p>人名</p>
+                    <p>昵称：{{this.name}}</p>
                     <p>
                         <span class="user-icon">
                             <i class="mobile fa fa-fw fa-mobile-phone"></i>
                         </span>
-                        <span class="icon-mobile-number">电话</span>
+                        <span class="icon-mobile-number">电话:{{this.accountName}}</span>
                     </p>
                 </div>
                 <span class="arrow">
@@ -25,9 +26,9 @@
         </section>
         <section class="profile-1reTe">
                 <!-- 我的订单 -->
-                <router-link to='/order' class="myorder">
+                <!--<router-link to='/order' class="myorder">
                     <aside>
-                        <!-- <i class="fa fa-fw fa-calendar-o" style="color:#4aa5f0;"></i> -->
+                        <i class="fa fa-fw fa-calendar-o" style="color:#4aa5f0;"></i>
                     </aside>
                    
                     <div class="myorder-div">
@@ -36,11 +37,11 @@
                             <i class="fa fa-fw fa-angle-right"></i>
                         </span>
                     </div>
-                </router-link>
+                </router-link>-->
                 <!-- 积分商城 -->
                 <a href='#' class="myorder">
                     <aside>
-                        
+                        <i class="fa fa-fw fa-key"></i>
                     </aside>
                     
                     <router-link to='/passwdChange' class="myorder-div">
@@ -53,7 +54,7 @@
                 <!-- 饿了么会员卡 -->
                 <router-link to='/vipcard' class="myorder">
                     <aside>
-                        
+                        <i class="fa fa-fw fa-user"></i>
                     </aside>
                     <div class="myorder-div">
                         <span>修改个人资料</span>
@@ -67,7 +68,7 @@
                 <!-- 服务中心 -->
                 <router-link to='' class="myorder">
                     <aside>
-                        
+                        <i class="fa fa-fw fa-archive"></i>
                     </aside>
                     <div class="myorder-div">
                         <span>服务中心</span>
@@ -86,10 +87,12 @@
     import main_head from 'components/header/main_head';
     import alertTip from 'components/errorTip/errorTip';
     import footer from 'components/footer/footer';
+    import {getCookie} from '../../assets/js/cookie.js';
     export default {
         data(){
             return {
-                
+                accountName:'',//账户
+                name:'',//昵称
             }
         },
         props:['index'],
@@ -98,9 +101,24 @@
             'alertTip': alertTip,
             'footer-box':footer
         },
+        created(){
+            this.init();
+        },
         methods: {
+            //初始化
+            init(){
+                this.accountName = getCookie("user_name");
+                this.name = getCookie("nick_name");
+            },
             toOrder(){
                 this.$router.push("/passwdChange");
+            }
+        },
+        watch: {
+            '$route' (to, from) {
+                if (from.path === '/vipcard') {
+                    this.init()
+                }
             }
         }
     }
@@ -145,6 +163,7 @@
                 flex-grow: 1;
                 p{
                     font-weight:700;
+                    margin-top: 6px;
                     sc(.8rem,$fc);
                     .user-icon{
                         wh(0.5rem,0.75rem);
@@ -176,6 +195,14 @@
             }
         }
    }
+   .comment-img {
+        width: 60px;
+        height: 60px;
+    }
+    .comment-img img {
+        width: 100%;
+        border-radius: 40px;
+    }
     .profile-1reTe{
         margin-top:.4rem;
         background:$fc;
@@ -197,7 +224,7 @@
             .myorder-div{
                 width:100%;
                 border-bottom:1px solid #f1f1f1;
-                padding:.433333rem .266667rem .433333rem 0;
+                padding:.433333rem .266667rem .433333rem .266667rem;
                 sc(.7rem,#333);
                 display:flex;
                 justify-content:space-between;

@@ -70,7 +70,7 @@ import {getCookie} from '../../assets/js/cookie.js'
                             style: 'top: 0px;'
                             ,content: '评论成功！'
                             ,skin: 'msg'
-                            ,time: 1 //2秒后自动关闭
+                            ,time: 1 //1秒后自动关闭
                           });
                         this.commendContent = '';
                         this.$router.push('/orderDetail');
@@ -80,7 +80,7 @@ import {getCookie} from '../../assets/js/cookie.js'
                             style: 'top: 0px;'
                             ,content: '未知错误！'
                             ,skin: 'msg'
-                            ,time: 1 //2秒后自动关闭
+                            ,time: 1 //1秒后自动关闭
                           });
                     }
                 })

@@ -6,19 +6,15 @@
                 <ul class="changepw-3LrxS">
                     <li class="changepw-lCnqr">
                         <input type="password" placeholder="旧密码" class="changepw-3bmr-" v-model="oldPasswd" v-on:input ="checkInput">
-                        <span class="changepw-1OY0R" v-if="oldPasswdTip">密码长度为 6－20 位</span>
-                        <span class="changepw-1OY0R" v-if="oldPasswdError">旧密码错误</span>
                     </li>
                     <li class="changepw-lCnqr">
-                        <input type="password" placeholder="新密码" class="changepw-3bmr-" v-model="newPasswd" v-on:input ="checkInput">
-                        <span class="changepw-1OY0R" v-if="newPasswdTip">密码长度为 6－20 位</span>
+                        <input type="password" placeholder="新密码" class="changepw-3bmr-" v-model="newPasswd" v-on:input ="checkInput">   
                     </li>
                     <li class="changepw-lCnqr">
                         <input type="password" placeholder="确认密码" class="changepw-3bmr-" v-model="comfirePasswd" v-on:input ="checkInput">
-                        <span class="changepw-1OY0R" v-if="comfirePasswdTip">两次密码输入不一致</span>
                     </li>
                 </ul>
-                <button type="button" :disabled="Btndisabled" class="changepw-1GfOJ" @click="postNewpasswd">确认并保存</button>
+                <button type="button" :disabled="Btndisabled" class="changepw-1GfOJ" @click="inputCheck">确认并保存</button>
             </section>
         </div>
         <alertTip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alertTip>
@@ -28,7 +24,7 @@
 <script>
     import main_head from 'components/header/main_head';
     // import alertTip from 'components/errorTip/errorTip';
-    import {getCookie} from '../../assets/js/cookie.js'
+    import {setCookie,getCookie,delCookie} from '../../assets/js/cookie.js'
     import alertTip from 'components/errorTip/errorTip';
     export default {
         data(){
@@ -45,7 +41,7 @@
                 Btndisabled:true,
                 user_name:'',
                 user_passwd:'',
-                url:'updatepasswd',
+                url:'updatePwd',
             }
         },
         mounted(){
@@ -68,29 +64,54 @@
             },
             //用户输入验证控制器
             inputCheck(){
-                if(this.oldPasswd.length<6&&this.oldPasswd.length>20){
+                if(this.oldPasswd.length<6||this.oldPasswd.length>20){
                     this.oldPasswdTip = true;
+                    layer.open({
+                        style: 'top: 0px;'
+                        ,content: '旧密码错误！'
+                        ,skin: 'msg'
+                        ,time: 1 //1秒后自动关闭
+                      });
                 }
                 else{
                     this.oldPasswdTip = false;
-                }
-                if(this.newPasswd.length<6&&this.newPasswd.length>20){
-                    this.newPasswdTip = true;
-                }
-                else {
-                    this.newPasswdTip = false;
-                }
-                if (this.newPasswd!==this.comfirePasswd||!this.comfirePasswd) {
-                    this.comfirePasswdTip = true;
-                }
-                else{
-                    this.comfirePasswdTip = false;
-                }
-                if (this.oldPasswd!==this.user_passwd) {
-                    this.oldPasswdError = true;
-                }
-                else{
-                    this.oldPasswdError = false;
+                    if (this.oldPasswd!==this.user_passwd) {
+                        this.oldPasswdError = true;
+                        layer.open({
+                            style: 'top: 0px;'
+                            ,content: '旧密码错误！'
+                            ,skin: 'msg'
+                            ,time: 1 //1秒后自动关闭
+                          });
+                    }
+                    else{
+                        this.oldPasswdError = false;
+                        if(this.newPasswd.length<6||this.newPasswd.length>20){
+                            this.newPasswdTip = true;
+                            layer.open({
+                                style: 'top: 0px;'
+                                ,content: '密码长度应为 6－20 位！'
+                                ,skin: 'msg'
+                                ,time: 1 //1秒后自动关闭
+                              });
+                        }
+                        else {
+                            this.newPasswdTip = false;
+                            if (this.newPasswd!==this.comfirePasswd||!this.comfirePasswd) {
+                                this.comfirePasswdTip = true;
+                                layer.open({
+                                    style: 'top: 0px;'
+                                    ,content: '两次密码输入不一致！'
+                                    ,skin: 'msg'
+                                    ,time: 1 //1秒后自动关闭
+                                  });
+                            }
+                            else{
+                                this.comfirePasswdTip = false;
+                                this.postNewpasswd();
+                            }
+                        }
+                    }
                 }
             },
             //btn显示的控制器
@@ -106,17 +127,25 @@
             },
             //修改密码对接
             postNewpasswd(){
-                this.inputCheck();
                 var data = {
                     'account':this.user_name,
-                    'passwd':this.newPasswd
+                    'oldPwd':this.oldPasswd,
+                    'newPwd':this.newPasswd
                 }
                 let myurl = publicDom.base_url+this.url;
                 this.$http.post(myurl,data,{emulateJSON:true}).then((res) =>{
                     let list = res.data;
                     if (list.code == 200) {
-                        this.showAlert = true;
-                        this.alertText = '密码修改成功!';
+                       layer.open({
+                            style: 'top: 0px;'
+                            ,content: '修改密码成功！'
+                            ,skin: 'msg'
+                            ,time: 1.5 //1秒后自动关闭
+                          });
+                       setCookie('user_passwd',this.newPasswd,1000*60);
+                       this.oldPasswd = '';
+                       this.newPasswd = '';
+                       this.comfirePasswd = '';
                         // setTimeout(function(){
                         //       this.showAlert = false;
                         //       this.$router.push('/login');
